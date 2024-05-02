@@ -83,70 +83,6 @@ nav ul li button {
     margin: 100px auto;
 }
 
-.search {
-    margin-top: 14%;
-    max-width: 620px;
-    margin: 0 auto;
-}
-
-.search form {
-    display: flex;
-    align-items: center;
-    background: #fff;
-    border-radius: 30px;
-    padding: 10px;
-    margin-top: 30px;
-}
-
-.search form input {
-    border: 0;
-    outline: 0;
-    width: 100%;
-    font-size: 16px;
-    padding-left: 10px;
-}
-
-.search form .btn {
-    font-size: 15px;
-    padding: 10px 30px;
-    display: flex;
-    border-radius: 20px;
-    cursor: pointer;
-    background-color: #dddddd;
-}
-
-.search form .btn:hover {
-    background-color: hsl(210, 50%, 90%); /* Adjust the lightness percentage as needed */
-}
-
-.result {
-    margin-top: 2px;
-    border-radius: 15px;
-    background-color: #fff;
-    box-shadow: var(--shadow);
-}
-
-.result li {
-    display: flex;
-    align-items: center;
-    padding: 12px;
-    cursor: pointer;
-}
-
-.result li:hover {
-    background-color: #dddddd;
-}
-
-.result li i {
-    font-size: 14px;
-    margin-right: 10px;
-}
-
-.result li a {
-    font-size: 14px;
-    text-decoration: none;
-    color: var(--black);
-}
 
 .content h1 {
     margin: 0;
@@ -156,4 +92,76 @@ nav ul li button {
     line-height: 85px;
     margin-bottom: 25px;
     padding-left: 20px;
+}
+
+
+.search{
+  max-width: 450px;
+  margin: 150px auto;
+}
+
+.search .searchInput{
+  background: #fff;
+  width: 100%;
+  border-radius: 5px;
+  position: relative;
+  box-shadow: 0px 1px 5px 3px rgba(0,0,0,0.12);
+}
+
+.searchInput input{
+  height: 55px;
+  width: 100%;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  padding: 0 60px 0 20px;
+  font-size: 18px;
+  box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
+}
+
+.searchInput.active input{
+  border-radius: 5px 5px 0 0;
+}
+
+.searchInput .resultBox{
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.searchInput.active .resultBox{
+  padding: 10px 8px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.resultBox li{
+  list-style: none;
+  padding: 8px 12px;
+  display: none;
+  width: 100%;
+  cursor: default;
+  border-radius: 3px;
+}
+
+.searchInput.active .resultBox li{
+  display: block;
+}
+.resultBox li:hover{
+  background: #efefef;
+}
+
+.searchInput .icon{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  height: 55px;
+  width: 55px;
+  text-align: center;
+  line-height: 55px;
+  font-size: 20px;
+  color: #644bff;
+  cursor: pointer;
 }

@@ -166,174 +166,102 @@ catch(SQLException e){
   <body>
     <div class="container">
       <nav>
-        <h1>MovieRec</h1>
+        <h1>FilmFocus</h1>
         <ul>
           <li>Watch List</li>
           <li>See Recommended</li>
         </ul>
         <button class="profile"><img src="profile.png" alt="" /></button>
       </nav>
-      <div class="wrapper">
-        <div class="search">
-          <form>
-            <input
-              type="text"
-              placeholder="Search for movie"
-              id="searchInput"
-              onkeyup="search(event)"
-            />
-            <button type="submit" class="btn">Search</button>
-          </form>
-          <ul class="result" id="searchResults">
-            <li>
-              <i class="fa-solid fa-magnifying-glass"></i>
-              <a href="#">Dream Scenario</a>
-            </li>
-            <li>
-              <i class="fa-solid fa-magnifying-glass"></i>
-              <a href="#">youtube</a>
-            </li>
-            <li>
-              <i class="fa-solid fa-magnifying-glass"></i>
-              <a href="#">how to code</a>
-            </li>
-            <li>
-              <i class="fa-solid fa-magnifying-glass"></i>
-              <a href="#">movie rec</a>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <div class="search">
+  <div class="searchInput">
+    <input type="text" placeholder="Search for movie">
+    <div class="resultBox">
+      <!-- here list are inserted from javascript -->
+    </div>
+    <div class="icon"><i class="fas fa-search"></i></div>
+  </div>
+</div>
       <div class="content">
         <h1><br />Trending Movies</h1>
       </div>
     </div>
 
     <script>
-    
+    let suggestions = [
+        "Channel",
+        "CodingLab",
+        "CodingNepal",
+        "YouTube",
+        "YouTuber",
+        "YouTube Channel",
+        "Blogger",
+        "Bollywood",
+        "Vlogger",
+        "Vechiles",
+        "Facebook",
+        "Freelancer",
+        "Facebook Page",
+        "Designer",
+        "Developer",
+        "Web Designer",
+        "Web Developer",
+        "Login Form in HTML & CSS",
+        "How to learn HTML & CSS",
+        "How to learn JavaScript",
+        "How to became Freelancer",
+        "How to became Web Designer",
+        "How to start Gaming Channel",
+        "How to start YouTube Channel",
+        "What does HTML stands for?",
+        "What does CSS stands for?",
+    ];
 
-      document.addEventListener('DOMContentLoaded', function() {
-  const searchInput = document.getElementById('searchInput');
-  const searchResults = document.getElementById('searchResults');
+    // getting all required elements
+    const searchInput = document.querySelector(".searchInput");
+    const input = searchInput.querySelector("input");
+    const resultBox = searchInput.querySelector(".resultBox");
+    const icon = searchInput.querySelector(".icon");
+    let linkTag = searchInput.querySelector("a");
+    let webLink;
 
-  // Initially hide the search results
-  searchResults.style.display = 'none';
-
-  searchInput.addEventListener('input', function() {
-    const searchText = this.value.trim();
-  
-    // If search text is empty, hide the results
-    if (searchText === '') {
-      searchResults.style.display = 'none';
-    } else {
-      // Otherwise, show the results
-      searchResults.style.display = 'block';
+    // if user press any key and release
+    input.onkeyup = (e)=>{
+        let userData = e.target.value; //user enetered data
+        let emptyArray = [];
+        if(userData){
+            emptyArray = suggestions.filter((data)=>{
+                //filtering array value and user characters to lowercase and return only those words which are start with user enetered chars
+                return data.toLocaleLowerCase().startsWith(userData.toLocaleLowerCase()); 
+            });
+            emptyArray = emptyArray.map((data)=>{
+                // passing return data inside li tag
+                return data = '<li>'+ data +'</li>';
+            });
+            searchInput.classList.add("active"); //show autocomplete box
+            showSuggestions(emptyArray);
+            let allList = resultBox.querySelectorAll("li");
+            for (let i = 0; i < allList.length; i++) {
+                //adding onclick attribute in all li tag
+                allList[i].setAttribute("onclick", "select(this)");
+            }
+        }else{
+            searchInput.classList.remove("active"); //hide autocomplete box
+        }
     }
-  });
-});
 
-
-
-let keywords = [];
-
-//this code gives values from java array 'movieList' to the javascript array 'keywords'
-<%
-//java
-int i = 0;
-int numMovies = 0;
-st = dbConn.createStatement();
-lt = dbConn.createStatement();
-rs = st.executeQuery("SELECT * FROM movies");
-ls = lt.executeQuery("SELECT * FROM movies");
-
-try{
-//get num of movies
-while(rs.next()) 
-{   
-	numMovies++;
-
-}
-
-//array to store all movie names
-String[] movieList = new String[numMovies];  
-
-//add movie names to list
-while(ls.next()) 
-{   
-	movieList[i] = ls.getString(2);
-	i++;
-}
-          		  
-        		  
-//this puts all the elements in movieList into keywords
-for(i = 0; i < numMovies; i++){
-%>
-	keywords[<%= i %>] = "<%= movieList[i] %>"
-<%
-}
-
-}
-
-catch(SQLException e){
-	out.println("ERROR: COULD NOT CONNECT TO DATABASE"); //if you see this error, you fucked something up with the database or java code that talks with the database.
-}
-%>
-
-console.log(keywords);
-
-
-let list = [];
-
-const generateList = () => {
-    // generates result list using li tag
-    list = list.map((data) => (data = liTag(data)));
-};
-
-const liTag = (value) => 
-    `<li><i class="fa-solid fa-magnifying-glass"></i><a href="#">${value}</a></li>`;
-
-const startsWith = (keyword, inputKeyword) =>
-    // filters keywords using starting letter of text
-    keyword.toLowerCase().startsWith(inputKeyword.toLowerCase());
-
-const includes = (keyword, inputKeyword) =>
-    // filters keywords using letter found anywhere in input text
-    keyword.toLowerCase().includes(inputKeyword.toLowerCase());
-
-const filter = (inputKeyword) => 
-    (list = keywords.filter(
-        (keyword) =>
-            startsWith(keyword, inputKeyword) || includes(keyword, inputKeyword)
-    ));
-
-const showList = (inputKeyword) => {
-    result.classList.add("show");
-    result.innerHTML = list.join("") || liTag(inputKeyword);
-};
-
-const hideList = () => {
-    list = [];
-    result.innerHTML = '';
-    result.classList.remove("show");
-};
-
-const search = (e) => {
-    let keyword = e.target.value.trim();
-
-    if (keyword) {
-        filter(keyword);
-        generateList();
-        showList(keyword);
-    } else {
-        hideList();
+    function showSuggestions(list){
+        let listData;
+        if(!list.length){
+            userValue = inputBox.value;
+            listData = '<li>'+ userValue +'</li>';
+        }else{
+            listData = list.join('');
+        }
+        resultBox.innerHTML = listData;
     }
-};
-
-const searchInput = document.getElementById('searchInput');
-const result = document.getElementById('searchResults');
-
-searchInput.addEventListener('input', search);
 
     </script>
   </body>
 </html>
+
